@@ -25,3 +25,7 @@ The media will still pop up in a VideoLAN window, so if you need to
 make less common adjustments (playback speed, precise seeks, etc.) you
 can switch focus and do it directly in VLC. The keybindings are for
 frequent media control, like skipping back and forth by a few seconds.
+
+## See Also
+
+* [dialogger.el](https://github.com/vermiculus/dialogger.el)
