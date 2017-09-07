@@ -37,6 +37,19 @@
     (setf (process-get transcription-process :media-file) file)
     (transcription-play/pause)))
 
+(defun transcription-time-filter (process output)
+  (let ((time (string-to-number
+               (car (split-string output (char-to-string ?\r))))))
+    (insert
+     (transcription-format-time time))))
+
+(defun transcription-format-time (time)
+  (let* ((minutes (/ time 60))
+         (hours   (/ minutes 60))
+         (seconds (mod time 60))
+         (ts (format "%02d:%02d:%02d\n" hours minutes seconds)))
+    ts))
+
 (defun transcription (&rest commands)
   "Send COMMAND to the VideoLAN subprocess."
   (if (not (processp transcription-process))
@@ -46,6 +59,10 @@
   (with-temp-buffer
     (let ((standard-output (current-buffer)))
       (dolist (command commands)
+        (if (eq command :get_time)
+            (set-process-filter transcription-process
+                                'transcription-time-filter)
+          (set-process-filter transcription-process 'nil))
         (if (keywordp command)
             (princ (substring (symbol-name command) 1))
           (princ command))
@@ -94,6 +111,9 @@
 (defalias 'transcription-backward-3s
   (transcription-partial :seek "-3"))
 
+(defalias 'transcription-get-time
+  (transcription-partial :get_time))
+
 (defun transcription-seek (time)
   (interactive "nSeek seconds: ")
   (transcription :seek time))
@@ -108,6 +128,7 @@
       (define-key map (kbd "C-c t") #'transcription-backward-10s)
       (define-key map (kbd "C-c S") #'transcription-forward-3s)
       (define-key map (kbd "C-c s") #'transcription-backward-3s)
+      (define-key map (kbd "C-c C-t") #'transcription-get-time)
       (define-key map (kbd "C-c C-s") #'transcription-seek)))
   "Keymap for `transcription-mode'.")
 
