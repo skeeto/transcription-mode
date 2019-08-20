@@ -29,3 +29,4 @@ frequent media control, like skipping back and forth by a few seconds.
 ## See Also
 
 * [dialogger.el](https://github.com/vermiculus/dialogger.el)
+* [mpv.el](https://github.com/kljohann/mpv.el)
