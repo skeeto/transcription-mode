@@ -2,7 +2,7 @@
 
 The gist of the mode is to be able to precisely control media playback
 while in a buffer containing that media's transcription. The main use
-case is to rewind the video by a few second in order to re-listen to a
+case is to rewind the video by a few seconds in order to re-listen to a
 few words so they can be typed into the buffer, or corrected. It uses
 VideoLAN's console interface to drive playback from within Emacs.
 
