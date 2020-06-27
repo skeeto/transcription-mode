@@ -75,12 +75,6 @@
       (princ "\n")
       (process-send-region transcription-process (point-min) (point-max)))))
 
-(defun transcription-partial (&rest commands)
-  "Return an interactive function applying COMMANDS."
-  (lambda ()
-    (interactive)
-    (apply #'transcription commands)))
-
 (defun transcription-play/pause ()
   "Toggle play/pause on the transcription media."
   (interactive)
@@ -92,32 +86,39 @@
       (transcription :pause)
       (setf (process-get transcription-process :play-state) 'paused))))
 
-(defalias 'transcription-forward-10m
-  (transcription-partial :seek "+600"))
+(defmacro transcription-defun (name &rest commands)
+  "Define an interactive function NAME to run COMMANDS."
+  (declare (indent 1))
+  `(defun ,name ()
+     (interactive)
+     (transcription ,@commands)))
 
-(defalias 'transcription-backward-10m
-  (transcription-partial :seek "-600"))
+(transcription-defun transcription-forward-10m
+  :seek "+600")
 
-(defalias 'transcription-forward-1m
-  (transcription-partial :seek "+60"))
+(transcription-defun transcription-backward-10m
+  :seek "-600")
 
-(defalias 'transcription-backward-1m
-  (transcription-partial :seek "-60"))
+(transcription-defun transcription-forward-1m
+  :seek "+60")
 
-(defalias 'transcription-forward-10s
-  (transcription-partial :seek "+10"))
+(transcription-defun transcription-backward-1m
+  :seek "-60")
 
-(defalias 'transcription-backward-10s
-  (transcription-partial :seek "-10"))
+(transcription-defun transcription-forward-10s
+  :seek "+10")
 
-(defalias 'transcription-forward-3s
-  (transcription-partial :seek "+3"))
+(transcription-defun transcription-backward-10s
+  :seek "-10")
 
-(defalias 'transcription-backward-3s
-  (transcription-partial :seek "-3"))
+(transcription-defun transcription-forward-3s
+  :seek "+3")
 
-(defalias 'transcription-get-time
-  (transcription-partial :get_time))
+(transcription-defun transcription-backward-3s
+  :seek "-3")
+
+(transcription-defun transcription-get-time
+  :get_time)
 
 (defun transcription-seek (time)
   (interactive "nSeek seconds: ")
