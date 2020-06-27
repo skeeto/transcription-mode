@@ -37,6 +37,11 @@
     (setf (process-get transcription-process :media-file) file)
     (transcription-play/pause)))
 
+(defun transcription-stop ()
+  "Stop the transcription process."
+  (interactive)
+  (kill-process transcription-process))
+
 (defun transcription-time-filter (_ output)
   (let ((time (string-to-number
                (car (split-string output (char-to-string ?\r))))))
