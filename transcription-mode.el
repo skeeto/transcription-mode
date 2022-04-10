@@ -17,6 +17,7 @@
 
 (defcustom transcription-vlc-program-name "vlc"
   "Path to the VideoLAN executable"
+  :type '(file :must-match t)
   :group 'transcription-mode)
 
 (defvar transcription-process nil
